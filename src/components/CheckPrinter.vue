@@ -20,7 +20,7 @@
                 </div>
                 <div class="amount-line-data" ref="line" style="position: absolute; top: 240px; left: 100px">
                     ***
-                    {{toWords(check.amount)}} 
+                    {{toWords(check.amount)}}
                     ***
                 </div>
                 <div class="amount-line" style="position: absolute; top: 250px; left: 60px">
@@ -198,20 +198,20 @@ function genNewCheck () {
     let checkList = JSON.parse(localStorage.getItem('checkList') || '[]')
     let recentCheck = checkList[checkList.length - 1]
     let check = {}
-    check.accountHolderName = recentCheck?.accountHolderName || 'John Smith'
-    check.accountHolderAddress = recentCheck?.accountHolderAddress || '123 Cherry Tree Lane'
-    check.accountHolderCity = recentCheck?.accountHolderCity || 'New York'
-    check.accountHolderState = recentCheck?.accountHolderState || 'NY'
-    check.accountHolderZip = recentCheck?.accountHolderZip || '10001'
+    check.accountHolderName = recentCheck?.accountHolderName || import.meta.env.VITE_DEFAULT_NAME
+    check.accountHolderAddress = recentCheck?.accountHolderAddress || import.meta.env.VITE_DEFAULT_ADDRESS
+    check.accountHolderCity = recentCheck?.accountHolderCity || import.meta.env.VITE_DEFAULT_CITY
+    check.accountHolderState = recentCheck?.accountHolderState || import.meta.env.VITE_DEFAULT_STATE
+    check.accountHolderZip = recentCheck?.accountHolderZip || import.meta.env.VITE_DEFAULT_ZIP
     check.checkNumber = recentCheck?.checkNumber ? (parseInt(recentCheck?.checkNumber) + 1) : '100'
     check.date = new Date().toLocaleDateString()
-    check.bankName = recentCheck?.bankName || 'Bank Name, INC'
+    check.bankName = recentCheck?.bankName || import.meta.env.VITE_DEFAULT_BANK
     check.amount = '0.00'
-    check.payTo = 'Michael Johnson'
-    check.memo = recentCheck?.memo || 'Rent'
-    check.signature = recentCheck?.signature || 'John Smith'
-    check.routingNumber = recentCheck?.routingNumber || '022303659'
-    check.bankAccountNumber = recentCheck?.bankAccountNumber || '000000000000'
+    check.payTo = import.meta.env.VITE_DEFAULT_PAYTO
+    check.memo = recentCheck?.memo || import.meta.env.VITE_DEFAULT_MEMO
+    check.signature = recentCheck?.signature || import.meta.env.VITE_DEFAULT_SIGNATURE
+    check.routingNumber = recentCheck?.routingNumber || import.meta.env.VITE_DEFAULT_ROUTING
+    check.bankAccountNumber = recentCheck?.bankAccountNumber || import.meta.env.VITE_DEFAULT_ACCOUNT
     return check
 }
 
