@@ -122,8 +122,8 @@
 import print from 'print-js';
 import { ToWords } from 'to-words';
 import { ref, reactive, nextTick, watch, onMounted, onUnmounted } from 'vue'
-import { formatMoney } from '../utilities.ts'
-import { useAppStore } from '../stores/app.ts'
+import { formatMoney } from '../utilities'
+import { useAppStore } from '../stores/app'
 
 const state = useAppStore()
 
@@ -194,24 +194,43 @@ function saveToHistory () {
     localStorage.setItem('checkList', JSON.stringify(checkList))
 }
 
-function genNewCheck () {
+type Check = {
+    accountHolderName: string,
+    accountHolderAddress: string,
+    accountHolderCity: string,
+    accountHolderState: string,
+    accountHolderZip: string,
+    checkNumber: string,
+    date: string,
+    bankName: string,
+    amount: string,
+    payTo: string,
+    memo: string,
+    signature: string,
+    routingNumber: string,
+    bankAccountNumber: string,
+    [key: string]: any
+}
+
+function genNewCheck (): Check {
     let checkList = JSON.parse(localStorage.getItem('checkList') || '[]')
     let recentCheck = checkList[checkList.length - 1]
-    let check = {}
-    check.accountHolderName = recentCheck?.accountHolderName || import.meta.env.VITE_DEFAULT_NAME
-    check.accountHolderAddress = recentCheck?.accountHolderAddress || import.meta.env.VITE_DEFAULT_ADDRESS
-    check.accountHolderCity = recentCheck?.accountHolderCity || import.meta.env.VITE_DEFAULT_CITY
-    check.accountHolderState = recentCheck?.accountHolderState || import.meta.env.VITE_DEFAULT_STATE
-    check.accountHolderZip = recentCheck?.accountHolderZip || import.meta.env.VITE_DEFAULT_ZIP
-    check.checkNumber = recentCheck?.checkNumber ? (parseInt(recentCheck?.checkNumber) + 1) : '100'
-    check.date = new Date().toLocaleDateString()
-    check.bankName = recentCheck?.bankName || import.meta.env.VITE_DEFAULT_BANK
-    check.amount = '0.00'
-    check.payTo = import.meta.env.VITE_DEFAULT_PAYTO
-    check.memo = recentCheck?.memo || import.meta.env.VITE_DEFAULT_MEMO
-    check.signature = recentCheck?.signature || import.meta.env.VITE_DEFAULT_SIGNATURE
-    check.routingNumber = recentCheck?.routingNumber || import.meta.env.VITE_DEFAULT_ROUTING
-    check.bankAccountNumber = recentCheck?.bankAccountNumber || import.meta.env.VITE_DEFAULT_ACCOUNT
+    let check: Check = {
+        accountHolderName: recentCheck?.accountHolderName || import.meta.env.VITE_DEFAULT_NAME,
+        accountHolderAddress: recentCheck?.accountHolderAddress || import.meta.env.VITE_DEFAULT_ADDRESS,
+        accountHolderCity: recentCheck?.accountHolderCity || import.meta.env.VITE_DEFAULT_CITY,
+        accountHolderState: recentCheck?.accountHolderState || import.meta.env.VITE_DEFAULT_STATE,
+        accountHolderZip: recentCheck?.accountHolderZip || import.meta.env.VITE_DEFAULT_ZIP,
+        checkNumber: recentCheck?.checkNumber ? (parseInt(recentCheck?.checkNumber) + 1).toString() : '100',
+        date: new Date().toLocaleDateString(),
+        bankName: recentCheck?.bankName || import.meta.env.VITE_DEFAULT_BANK,
+        amount: '0.00',
+        payTo: import.meta.env.VITE_DEFAULT_PAYTO,
+        memo: recentCheck?.memo || import.meta.env.VITE_DEFAULT_MEMO,
+        signature: recentCheck?.signature || import.meta.env.VITE_DEFAULT_SIGNATURE,
+        routingNumber: recentCheck?.routingNumber || import.meta.env.VITE_DEFAULT_ROUTING,
+        bankAccountNumber: recentCheck?.bankAccountNumber || import.meta.env.VITE_DEFAULT_ACCOUNT
+    }
     return check
 }
 
@@ -219,7 +238,7 @@ const check = reactive(
     genNewCheck()
 )
 
-const line = ref(null)
+const line = ref<HTMLElement | null>(null)
 
 watch(check, async () => {
     await nextTick(() => {
@@ -237,20 +256,21 @@ function handlePrintShortcut(event: KeyboardEvent) {
 
 onMounted(() => {
     if (state.check) {
-        check.accountHolderName = state.check.accountHolderName
-        check.accountHolderAddress = state.check.accountHolderAddress
-        check.accountHolderCity = state.check.accountHolderCity
-        check.accountHolderState = state.check.accountHolderState
-        check.accountHolderZip = state.check.accountHolderZip
-        check.checkNumber = state.check.checkNumber
-        check.date = state.check.date
-        check.bankName = state.check.bankName
-        check.amount = state.check.amount
-        check.payTo = state.check.payTo
-        check.memo = state.check.memo
-        check.signature = state.check.signature
-        check.routingNumber = state.check.routingNumber
-        check.bankAccountNumber = state.check.bankAccountNumber
+        const loadedCheck = state.check as Check;
+        check.accountHolderName = loadedCheck.accountHolderName
+        check.accountHolderAddress = loadedCheck.accountHolderAddress
+        check.accountHolderCity = loadedCheck.accountHolderCity
+        check.accountHolderState = loadedCheck.accountHolderState
+        check.accountHolderZip = loadedCheck.accountHolderZip
+        check.checkNumber = loadedCheck.checkNumber
+        check.date = loadedCheck.date
+        check.bankName = loadedCheck.bankName
+        check.amount = loadedCheck.amount
+        check.payTo = loadedCheck.payTo
+        check.memo = loadedCheck.memo
+        check.signature = loadedCheck.signature
+        check.routingNumber = loadedCheck.routingNumber
+        check.bankAccountNumber = loadedCheck.bankAccountNumber
     }
     state.check = null
 
