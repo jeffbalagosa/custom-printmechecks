@@ -37,9 +37,9 @@
 </style>
 
 <script setup>
-import {formatMoney} from '../utilities.ts'
+import {formatMoney} from '../utilities'
 import { ref, onMounted} from 'vue'
-import { useAppStore } from '../stores/app.ts'
+import { useAppStore } from '../stores/app'
 import { useRouter } from 'vue-router'
 
 const state = useAppStore()
