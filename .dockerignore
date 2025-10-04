@@ -20,5 +20,7 @@ yarn-error.log*
 Thumbs.db
 
 # Misc
+# Keep generic .local files out of the context, but allow Vite env files
 *.local
+!.env.local
 .env

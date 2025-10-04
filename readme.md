@@ -113,6 +113,34 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
+### Environment configuration (.env.local)
+
+This project uses Vite for environment variables. To customize defaults (like names, addresses, routing numbers), create a `.env.local` file in the project root. Only variables prefixed with `VITE_` are exposed to the client app.
+
+Example `.env.local`:
+
+```dotenv
+VITE_DEFAULT_NAME="My Biz LLC"
+VITE_DEFAULT_ADDRESS="123 Main St"
+VITE_DEFAULT_CITY="Springfield"
+VITE_DEFAULT_STATE="CA"
+VITE_DEFAULT_ZIP="90210"
+VITE_DEFAULT_BANK="First National Bank"
+VITE_DEFAULT_PAYTO="John Doe"
+VITE_DEFAULT_MEMO="Services"
+VITE_DEFAULT_SIGNATURE="Jane Doe"
+VITE_DEFAULT_ROUTING="123456789"
+```
+
+Important:
+- Vite reads `.env.local` at build time. If you change values, rebuild and redeploy the container:
+	```bash
+	docker compose build --no-cache
+	docker compose up -d
+	```
+- The `.dockerignore` allows `.env.local` so your settings are included during the Docker build.
+- For runtime-only changes without rebuilds, consider a runtime config approach (config.json served by Nginx). Open an issue if you want this wired up.
+
 ### Logs and status
 
 ```bash
